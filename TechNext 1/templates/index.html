@@ -1,0 +1,146 @@
+<html>
+    <head>
+        <title>TechNext</title>
+        <link rel = "stylesheet" type="text/css" href="static/app.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div class = container>
+            <h1>Keyword</h1>
+            <label for="keyword">Keyword</label>
+            <input type="text" id="keyword"></input>
+            <button class="button" onclick="keyword(); return false;">Submit</button>
+            <button type="button" onclick="group_date(); return false;">Group</button>
+
+            <div id="successKey"></div>
+        </div>
+        <script>
+            function keyword(){
+                var text = document.getElementById("keyword").value;
+        
+                var xhttp = new XMLHttpRequest();
+        
+                xhttp.onreadystatechange = function() {
+                    if(this.readyState == 4 && this.status == 200) {
+                        var json = JSON.parse(xhttp.responseText);
+        
+                        var table = document.createElement('table');
+                        table.classList.add('table');
+        
+                        var thead = document.createElement('thead');
+                        var headerRow = document.createElement('tr');
+                        var headerCell1 = document.createElement('th');
+                        var headerCell2 = document.createElement('th');
+                        headerCell1.textContent = 'Company';
+                        headerCell2.textContent = 'Date';
+                        headerRow.appendChild(headerCell1);
+                        headerRow.appendChild(headerCell2);
+                        thead.appendChild(headerRow);
+                        table.appendChild(thead);
+                        
+                        var tbody = document.createElement('tbody');
+                        for(let i = 0; i <json.length; i++){
+                            var row = document.createElement('tr');
+                            var cell1 = document.createElement('td');
+                            var cell2 = document.createElement('td');
+                            cell1.textContent = json[i][1];
+                            cell2.textContent = json[i][2];
+                            row.appendChild(cell1);
+                            row.appendChild(cell2);
+                            tbody.appendChild(row);
+                        }
+        
+                        table.appendChild(tbody);
+        
+                        document.getElementById("successKey").innerHTML = "";
+                        document.getElementById("successKey").appendChild(table);
+                    }
+                };
+                xhttp.open("POST", '/search_keyword?keyword=' + text, true);
+                xhttp.send();
+            }
+
+            
+            function group_date(){
+                var text = document.getElementById("keyword").value;
+
+                var xhttp = new XMLHttpRequest();
+
+                xhttp.onreadystatechange = function() {
+                    if(this.readyState == 4 && this.status == 200) {
+                        var json = JSON.parse(xhttp.responseText);
+
+                        var table = document.createElement('table');
+                        table.classList.add('table');
+
+                        var thead = document.createElement('thead');
+                        var headerRow = document.createElement('tr');
+                        var headerCell1 = document.createElement('th');
+                        var headerCell2 = document.createElement('th');
+                        headerCell1.textContent = 'Company';
+                        headerCell2.textContent = 'Date';
+                        headerRow.appendChild(headerCell1);
+                        headerRow.appendChild(headerCell2);
+                        thead.appendChild(headerRow);
+                        table.appendChild(thead);
+                        
+                        var tbody = document.createElement('tbody');
+                        for(let i = 0; i <json.length; i++){
+                            var row = document.createElement('tr');
+                            var cell1 = document.createElement('td');
+                            var cell2 = document.createElement('td');
+                            cell1.textContent = json[i][1];
+                            cell2.textContent = json[i][2];
+                            row.appendChild(cell1);
+                            row.appendChild(cell2);
+                            tbody.appendChild(row);
+                        }
+
+                        table.appendChild(tbody);
+
+                        document.getElementById("successKey").innerHTML = "";
+                        document.getElementById("successKey").appendChild(table);
+                    }
+                };
+                xhttp.open("POST", `/search_group?keyword=${text}`, true);
+                xhttp.send();
+            }
+        </script>
+
+        <div class="container">
+            <h1>Add Company & Date</h1>
+
+            <form>
+                <label for="company_name">Company</label>
+                <input type="text" id="company_name"></input>
+                <label for="date">Date (Month #)</label>
+                <input type="text" id="date"></input>
+                <button type="button" onclick="add_comp(); return false;">Submit</button>
+                
+            </form>
+            <div id="successAdd"></div>
+        </div>
+
+        <script>
+            function add_comp(){
+                var text1 =document.getElementById("company_name").value;
+                var text2 = document.getElementById("date").value;
+
+                var xhttp = new XMLHttpRequest();
+
+                xhttp.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        document.getElementById("successAdd").innerHTML = xhttp.responseText;
+                    }
+                };
+                xhttp.open("POST", `/add_comp?company_name=${text1}&date=${text2}`, true);
+                xhttp.send();
+            }
+        </script>
+
+
+        
+    </body>
+</html>
